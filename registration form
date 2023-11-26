@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація</title>
+</head>
+<body>
+
+<?php
+$servername = "ваш сервер";
+$username = "ваш користувач";
+$password = "ваш пароль";
+$dbname = "mydatabase"; // Назва бази даних
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Помилка з'єднання з базою даних: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $login = $_POST['login'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+
+    $sql = "INSERT INTO users (login, password, email) VALUES ('$login', '$password', '$email')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Реєстрація успішна";
+    } else {
+        echo "Помилка при реєстрації: " . $conn->error;
+    }
+}
+
+$conn->close();
+?>
+
+<h2>Форма реєстрації</h2>
+<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+    <label for="login">Логін:</label>
+    <input type="text" name="login" required><br>
+
+    <label for="password">Пароль:</label>
+    <input type="password" name="password" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" required><br>
+
+    <input type="submit" value="Зареєструватися">
+</form>
+
+</body>
+</html>
